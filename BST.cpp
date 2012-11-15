@@ -111,26 +111,29 @@ int BST<T>::getDepth(Node<T>* n){
   }
 }
 
-/*
 template <typename T>
 void BST<T>::rotateLeft(Node<T>** parent){
+
+  parent = &root;  
+/*
   Node<T>* crit = *parent;
   Node<T>* tempRC = crit->getRightChild();
-  //Node<T>* tempLC = tempRC->getLeftChild();
+  Node<T>* tempLC = tempRC->getLeftChild();
   tempRC->setLeftChild(crit);
   crit->setRightChild(tempRC);
   *parent = *tempRC;
   
   tempRC->setBalance(0); 
-  
+*/  
 }
 
 template <typename T>
 void BST<T>::rotateRight(Node<T>** parent){
+  parent = &root;
 
 }
 
-*/
+
 
 template <typename T>
 void BST<T>::preOrderTraversal(Node<T>* root){
@@ -158,14 +161,6 @@ void BST<T>::postOrderTraversal(Node<T>* root){
     postOrderTraversal(root->getLeftChild());
     postOrderTraversal(root->getRightChild());
     std::cout << root->getValue() << ", " << root->getBalance() << std::endl; 
-  }
-}
-template <typename T>
-void BST<T>::traversalPrint(Node<T>* root) {
-  if(root != 0) {
-    traversalPrint(root->getLeftChild());
-    std::cout << root->getValue() << std::endl;
-    traversalPrint(root->getRightChild());
   }
 }
 
