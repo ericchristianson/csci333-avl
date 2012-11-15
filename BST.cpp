@@ -87,87 +87,20 @@ void BST<T>::remove(T v) {
 
 template <typename T>
 void BST<T>::print() {
-  int maxDepth = getTreeDepth(root); 
-  vector<string>* printQ = q();
-  int spaces;
-  int numElements = 1;
-  string currElement;
-  string symbols;
-  bool slash = true;
 
-  for(int depth=maxDepth; depth>0; --depth){
-    spaces = pow(2, depth);
-    for(int i=0; i<numElements; ++i){
-      currElement = (*printQ)[0];
-      for(int j=0; j<spaces; ++j){
-        cout << " ";
-      }
-      if(currElement != "0"){
-        cout << currElement;
-      }
-      else{
-        cout << " ";
-      }
+  postOrderTraversal(root);
 
-      for(int k=0; k<spaces/3; ++k){
-        symbols += " ";
-      }
-      if(currElement != "0"){
-        if(slash){
-          symbols+= "/";
-        }
-        else{
-          symbols += "\\";
-        }
-      }
-      slash = !slash;
-      printQ->erase(printQ->begin());
-    }
-    cout << endl;
-    cout << symbols << endl;
-    numElements *= 3;
-  }
-  delete printQ;
 }
 
-template <typename T>
-vector<string>* BST<T>::q(){
 
-  vector<string> * printQ = new vector<string>;
-  list< Node<T>* >* nodeQ = new list< Node<T>* >;
-  Node<T>* curr = root;
-  nodeQ->push_front(root);
-  printQ->push_back(toString(root->getValue()));
-
-  while(!nodeQ->empty()){
-    curr = nodeQ->front();
-    if(curr->getLeftChild() != 0){
-      printQ->push_back(toString(curr->getLeftChild()->getValue()));
-      nodeQ->push_back(curr->getLeftChild());
-    }
-    else{
-      printQ->push_back("0");
-    }
-    if(curr->getRightChild() != 0){
-      printQ->push_back(toString(curr->getRightChild()->getValue()));
-      nodeQ->push_back(curr->getRightChild());
-    }
-    else{
-      printQ->push_back("0");
-    }
-    nodeQ->pop_front();
-  }
-  delete nodeQ;
-  return printQ;
-}
 template <typename T>
-int BST<T>::getTreeDepth(Node<T>* n){
+int BST<T>::getDepth(Node<T>* n){
   if(n==0){
     return 0;
   }
   else{
-    int leftDepth = getTreeDepth(n->getLeftChild());
-    int rightDepth = getTreeDepth(n->getRightChild());
+    int leftDepth = getDepth(n->getLeftChild());
+    int rightDepth = getDepth(n->getRightChild());
 
     if(leftDepth > rightDepth){
       return leftDepth +1;
@@ -178,13 +111,55 @@ int BST<T>::getTreeDepth(Node<T>* n){
   }
 }
 
+/*
 template <typename T>
-string BST<T>::toString(T v){
-  std::stringstream ss;
-  ss << v;
-  return ss.str();
+void BST<T>::rotateLeft(Node<T>** parent){
+  Node<T>* crit = *parent;
+  Node<T>* tempRC = crit->getRightChild();
+  //Node<T>* tempLC = tempRC->getLeftChild();
+  tempRC->setLeftChild(crit);
+  crit->setRightChild(tempRC);
+  *parent = *tempRC;
+  
+  tempRC->setBalance(0); 
+  
 }
 
+template <typename T>
+void BST<T>::rotateRight(Node<T>** parent){
+
+}
+
+*/
+
+template <typename T>
+void BST<T>::preOrderTraversal(Node<T>* root){
+  if (root != 0){
+    std::cout << root->getValue() << ", " << root->getBalance() << std::endl;
+    preOrderTraversal(root->getLeftChild());
+    preOrderTraversal(root->getRightChild());
+  }
+
+}
+
+template <typename T>
+void BST<T>::inOrderTraversal(Node<T>* root){
+  if (root != 0){
+    inOrderTraversal(root->getLeftChild());
+    std::cout << root->getValue() << ", " << root->getBalance() << std::endl; 
+    inOrderTraversal(root->getRightChild());
+  }
+
+}
+
+template <typename T>
+void BST<T>::postOrderTraversal(Node<T>* root){
+  if (root != 0){
+    postOrderTraversal(root->getLeftChild());
+    postOrderTraversal(root->getRightChild());
+    std::cout << root->getValue() << ", " << root->getBalance() << std::endl; 
+  }
+}
 template <typename T>
 void BST<T>::traversalPrint(Node<T>* root) {
   if(root != 0) {

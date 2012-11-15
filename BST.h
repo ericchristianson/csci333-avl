@@ -13,9 +13,12 @@ class BST {
  private:
   Node<T>* root;
   void traversalPrint(Node<T>* root);
-  vector<string>* q();
-  int getTreeDepth(Node<T>* n);
-  string toString(T v);
+  int getDepth(Node<T>* n);
+  void rotateLeft(Node<T>** crit);
+  void rotateRight(Node<T>** crit);
+  void preOrderTraversal(Node<T>* root);
+  void inOrderTraversal(Node<T>* root);
+  void postOrderTraversal(Node<T>* root);
 
  public:
   BST<T>();
