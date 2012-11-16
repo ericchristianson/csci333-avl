@@ -6,31 +6,19 @@ int main() {
 
   bst->insert(10);
   bst->insert(5);
- 
-  bst->print();
-  std::cout << "\n"; 
-  
+  bst->insert(6);
+  bst->insert(8);
+  bst->insert(11);
+  bst->insert(7);
+  bst->insert(12);
   bst->insert(4);
- 
-  bst->print();
-  std::cout << "\n"; 
-  
-  bst->insert(3);
- 
-  bst->print();
-  std::cout << "\n"; 
-  bst->insert(2);
+  bst->insert(9);
+
+  bst->remove(10);
 
   bst->print();
   std::cout << "\n"; 
  
-  bst->insert(1);
-  
 
-  bst->print();
-  std::cout << "\n";
-
-  //bst->remove(7);
-  //bst->print();
 
 }

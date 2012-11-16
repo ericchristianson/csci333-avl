@@ -107,8 +107,12 @@ void BST<T>::insert(T v) {
 template <typename T>
 void BST<T>::remove(T v) {
   Node<T>** temp = &root;
+  list< Node<T>** > path;
   //Find the Node
   while(temp != 0 && (*temp)->getValue() != v) {
+    
+    path.push_back(temp);
+    
     if(v < (*temp)->getValue()){
       temp = &((*temp)->getLeftChild());
     }
@@ -116,22 +120,24 @@ void BST<T>::remove(T v) {
       temp = &((*temp)->getRightChild());
     }
   }
-  if(temp!= 0){
+
+  if((*temp)->getValue() != v){
+    return;
+  }
+
+  if(*temp!= 0){
     Node<T>* nodeToRemove = *temp;
     //Leaf node
     if(nodeToRemove->getLeftChild() == 0 && nodeToRemove->getRightChild() == 0){
-      delete nodeToRemove;
       *temp = 0;
     }
     //No right child
     else if(nodeToRemove->getRightChild() == 0){
-      *temp = nodeToRemove->getLeftChild();
-      delete nodeToRemove;
+      *temp = (*temp)->getLeftChild();
     }
     //No left child
     else if(nodeToRemove->getLeftChild() == 0){
-      *temp = nodeToRemove->getRightChild();
-      delete nodeToRemove;
+      *temp = (*temp)->getRightChild();
     }
     //Node has two children, use ios
     else{
@@ -140,53 +146,57 @@ void BST<T>::remove(T v) {
       //then all the way left
       while(ios->getLeftChild() != 0){
         ios = ios->getLeftChild();
+        *temp = (*temp)->getRightChild();
       }
       ios->setLeftChild(*(nodeToRemove->getLeftChild()));
-      *temp = nodeToRemove->getRightChild();
-      delete nodeToRemove;
+      *temp = (*temp)->getRightChild();
+
+      //update balance
+      (*temp)->setBalance((*temp)->getBalance());
+    }
+    delete nodeToRemove;
+
+    //go through list and check for critical nodes
+    //four cases, similar to insert
+    while(!path.empty()){
+      
+      temp = path.back();
+      path.pop_back();
+
+      //left cases
+      if(temp != 0 && (*temp)->getBalance() < -1){
+        if((*temp)->getRightChild()->getBalance() < 0){
+          rotateLeft(&((*temp)->getLeftChild()));
+          rotateRight(temp);
+        }
+        else{
+          rotateRight(temp);
+        }
+      }
+      
+      //right cases
+      if(temp != 0 && (*temp)->getBalance() > 1){
+        if((*temp)->getRightChild()->getBalance() < 0){
+          rotateRight(&((*temp)->getRightChild()));
+          rotateLeft(temp);
+        }
+        else{
+          rotateLeft(temp);
+        }
+      }
+      else{
+        (*temp)->setBalance((*temp)->getBalance());
+      } 
     }
   }
 }
-
 template <typename T>
 void BST<T>::print() {
 
   postOrderTraversal(root);
 
 }
-/*
-template <typename T>
-int BST<T>::getBalance(Node<T>* n){
 
-  if (n==0){
-    return 0;
-  }
-  else{
-    int rightTree = getDepth(n->getRightChild());
-    int leftTree = getDepth(n->getLeftChild());
-    return (rightTree - leftTree);
-  }
-
-}
-
-template <typename T>
-int BST<T>::getDepth(Node<T>* n){
-  if(n==0){
-    return 0;
-  }
-  else{
-    int leftDepth = getDepth(n->getLeftChild());
-    int rightDepth = getDepth(n->getRightChild());
-
-    if(leftDepth > rightDepth){
-      return leftDepth +1;
-    }
-    else{
-      return rightDepth +1;
-    }
-  }
-}
-*/
 template <typename T>
 void BST<T>::rotateLeft(Node<T>** parent){
   Node<T>* tempRC = *parent;
