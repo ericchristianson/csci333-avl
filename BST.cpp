@@ -114,22 +114,22 @@ int BST<T>::getDepth(Node<T>* n){
 template <typename T>
 void BST<T>::rotateLeft(Node<T>** parent){
 
-  parent = &root;  
-/*
-  Node<T>* crit = *parent;
+  Node<T>* crit = *parent;  
   Node<T>* tempRC = crit->getRightChild();
-  Node<T>* tempLC = tempRC->getLeftChild();
-  tempRC->setLeftChild(crit);
-  crit->setRightChild(tempRC);
-  *parent = *tempRC;
+  tempRC->setLeftChild(*crit);
+  crit->setRightChild(*tempRC);
+  *parent = tempRC;
   
-  tempRC->setBalance(0); 
-*/  
 }
 
 template <typename T>
 void BST<T>::rotateRight(Node<T>** parent){
-  parent = &root;
+
+  Node<T>* crit = *parent;
+  Node<T>* tempLC = crit->getLeftChild();
+  tempLC->setRightChild(*crit);
+  crit->setLeftChild(*tempLC);
+  *parent = tempLC;
 
 }
 
