@@ -154,7 +154,7 @@ void BST<T>::print() {
   postOrderTraversal(root);
 
 }
-
+/*
 template <typename T>
 int BST<T>::getBalance(Node<T>* n){
 
@@ -186,7 +186,7 @@ int BST<T>::getDepth(Node<T>* n){
     }
   }
 }
-
+*/
 template <typename T>
 void BST<T>::rotateLeft(Node<T>** parent){
   Node<T>* tempRC = *parent;
