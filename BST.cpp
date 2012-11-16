@@ -92,6 +92,19 @@ void BST<T>::print() {
 
 }
 
+template <typename T>
+int BST<T>::getBalance(Node<T>* n){
+
+  if (n==0){
+    return 0;
+  }
+  else{
+    int rightTree = getDepth(n->getRightChild());
+    int leftTree = getDepth(n->getLeftChild());
+    return (rightTree - leftTree);
+  }
+
+}
 
 template <typename T>
 int BST<T>::getDepth(Node<T>* n){

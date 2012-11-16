@@ -12,6 +12,7 @@ template <typename T>
 class BST {
  private:
   Node<T>* root;
+  int getBalance(Node<T>* n);
   int getDepth(Node<T>* n);
   void rotateLeft(Node<T>** crit);
   void rotateRight(Node<T>** crit);
