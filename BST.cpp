@@ -194,7 +194,7 @@ void BST<T>::rotateLeft(Node<T>** parent){
   *parent = tempRC->getRightChild();
   (*parent)->setLeftChild(*tempRC);
   tempRC->setRightChild(*tempLC);
-
+  std::cout << "left rotation" << std::endl;
 }
 
 template <typename T>
@@ -204,7 +204,7 @@ void BST<T>::rotateRight(Node<T>** parent){
   *parent = tempRC->getLeftChild();
   (*parent)->setRightChild(*tempRC);
   tempRC->setLeftChild(*tempLC);
-
+  std::cout << "right rotation" << std::endl;
 }
 
 
