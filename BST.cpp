@@ -30,33 +30,77 @@ template <typename T>
 void BST<T>::insert(T v) {
   Node<T>* temp = new Node<T>(v);
   Node<T>** curr = &root;
-  //Keep track of parent and prev for balance updates
+  //Keep track of parent for balance updates
   Node<T>** parent = 0;
-  Node<T>* prev = 0;
 
   //Find insert location
   while (*curr != 0) {
   
     if(v < (*curr)->getValue()){
+      //update balances
+      if((*curr)->getLeftChild() != 0){
+        (*curr)->setBalance((*curr)->getBalance()-1);
+      }
+
+      if((*curr)->getRightChild() != 0){
+        (*curr)->setBalance((*curr)->getBalance()+1);
+      }
+      if((*curr)->getBalance() < 0){
+        parent = curr;
+      }
+
       curr = &((*curr)->getLeftChild());
+    
     } 
     else if (v > (*curr)->getValue()) {
+      //update balances
+      if((*curr)->getLeftChild() != 0){
+        (*curr)->setBalance((*curr)->getBalance()-1);
+      }
+
+      if((*curr)->getRightChild() != 0){
+        (*curr)->setBalance((*curr)->getBalance()+1);
+      }
+
+      if((*curr)->getBalance() > 0){
+        parent = curr;
+      }
+
       curr = &((*curr)->getRightChild());
     }
   }
   *curr = temp;
 
-  //update balance
-
   //check for critical node
+  //if node is critical: 4 cases
 
-  //four cases if the node is a critical
-  //left left
-  //left right
-  //right left
-  //right right
-
-  //no critical node, update all balances in path
+  //left cases
+  if(parent !=0 && v < (*parent)->getValue()){
+    if((*parent)->getLeftChild()->getBalance()>0){
+      //left-right = double rotation
+      rotateLeft(&((*parent)->getLeftChild()));
+      rotateRight(parent);
+      (*parent)->setBalance(0);
+    }
+    else{
+      rotateRight(parent);
+      (*parent)->setBalance(0);
+    }
+  }
+  
+  //right cases
+  if(parent !=0 && v > (*parent)->getValue()){
+    if((*parent)->getRightChild()->getBalance() > 0){
+      //right-left = double rotation
+      rotateRight(&((*parent)->getRightChild()));
+      rotateLeft(parent);
+      (*parent)->setBalance(0);
+    }
+    else{
+      rotateLeft(parent);
+      (*parent)->setBalance(0);
+    }
+  }
 }
 
 
@@ -145,23 +189,21 @@ int BST<T>::getDepth(Node<T>* n){
 
 template <typename T>
 void BST<T>::rotateLeft(Node<T>** parent){
+  Node<T>* tempRC = *parent;
+  Node<T>* tempLC = (*parent)->getRightChild()->getLeftChild();
+  *parent = tempRC->getRightChild();
+  (*parent)->setLeftChild(*tempRC);
+  tempRC->setRightChild(*tempLC);
 
-  Node<T>* crit = *parent;  
-  Node<T>* tempRC = crit->getRightChild();
-  tempRC->setLeftChild(*crit);
-  crit->setRightChild(*tempRC);
-  *parent = tempRC;
-  
 }
 
 template <typename T>
 void BST<T>::rotateRight(Node<T>** parent){
-
-  Node<T>* crit = *parent;
-  Node<T>* tempLC = crit->getLeftChild();
-  tempLC->setRightChild(*crit);
-  crit->setLeftChild(*tempLC);
-  *parent = tempLC;
+  Node<T>* tempRC = *parent;
+  Node<T>* tempLC = (*parent)->getLeftChild()->getRightChild();
+  *parent = tempRC->getLeftChild();
+  (*parent)->setRightChild(*tempRC);
+  tempRC->setLeftChild(*tempLC);
 
 }
 
