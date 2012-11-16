@@ -30,16 +30,35 @@ template <typename T>
 void BST<T>::insert(T v) {
   Node<T>* temp = new Node<T>(v);
   Node<T>** curr = &root;
+  //Keep track of parent and prev for balance updates
+  Node<T>** parent = 0;
+  Node<T>* prev = 0;
 
+  //Find insert location
   while (*curr != 0) {
-    if (v < (*curr)->getValue()) {
+  
+    if(v < (*curr)->getValue()){
       curr = &((*curr)->getLeftChild());
-    } else if (v > (*curr)->getValue()) {
+    } 
+    else if (v > (*curr)->getValue()) {
       curr = &((*curr)->getRightChild());
     }
   }
   *curr = temp;
+
+  //update balance
+
+  //check for critical node
+
+  //four cases if the node is a critical
+  //left left
+  //left right
+  //right left
+  //right right
+
+  //no critical node, update all balances in path
 }
+
 
 template <typename T>
 void BST<T>::remove(T v) {
